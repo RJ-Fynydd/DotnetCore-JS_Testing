@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div id="jsGrid"></div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $("#jsGrid").jsGrid({
+            width: "100%",
+            height: 'auto',
+            pageLoading: false,
+            autoload: true,
+            sorting: true,
+            paging: true,
+            pageSize: 20,
+            pageButtonCount: 2,
+
+            fields: [
+                { name: "id", type: "text", width: 50, title: "ID" },
+                { name: "name", type: "text", width: 150, title: "NAME" },
+                { name: "age", type: "text", width: 50 },
+                { name: "note", type: "text", width: 300, title: "Notes" }
+            ],
+            controller: {
+                loadData: function (filter)
+                {
+                    return $.ajax({
+                        type: "GET",
+                        url: "/api/people",
+                        data: filter,
+                        dataType: "json"
+                    });
+                }
+            }
+        });
+    </script>
+
+}

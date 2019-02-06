@@ -1,0 +1,20 @@
+{
+  "name": "JS_Grid_Testing",
+  "authors": [
+    "Richard Nader Jr <richard.nader@fynydd.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jsgrid": "js-grid#v1.5.3"
+  }
+}
