@@ -4,6 +4,11 @@
 
 <div id="jsGrid"></div>
 
+<div class="ui-widget">
+    <label for="people">People: </label>
+    <input id="people">
+</div>
+
 @section Scripts {
 
     <script type="text/javascript">
@@ -36,6 +41,17 @@
                 }
             }
         });
+
+        $("#people").autocomplete({
+            source: "/api/people/search",
+            minLength: 2,
+            select: function (event, ui)
+            {
+                console.log("Selected: ", ui.item);
+            }
+        });
+
+
     </script>
 
 }

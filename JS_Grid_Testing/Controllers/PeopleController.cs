@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JS_Grid_Testing.Data;
 using JS_Grid_Testing.Data.Entities;
@@ -27,6 +28,25 @@ namespace JS_Grid_Testing.Controllers
             return people;
         }
 
+        [HttpGet("search")]
+        public ActionResult SearchPeople(string term)
+        {
+            var people = _context.People.Where(p => p.Name.Contains(term) || p.Age.ToString().Contains(term)).ToList();
+
+            var results = new List<AutocompleteResult>();
+
+            foreach(var person in people)
+            {
+                results.Add(new AutocompleteResult
+                {
+                    Id = person.Id,
+
+                });
+            }
+
+            return new JsonResult();
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Person>> GetPerson(int id)
         {
@@ -42,5 +62,12 @@ namespace JS_Grid_Testing.Controllers
         }
 
 
+    }
+
+    public class AutocompleteResult
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
     }
 }

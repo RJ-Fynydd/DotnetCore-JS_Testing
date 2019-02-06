@@ -3,14 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - JS_Grid_Testing</title>
+    <title>@ViewData["Title"] - JS_Testing</title>
 
     <environment include="Development">
+        <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/base.css" />
+        <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/autocomplete.css" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/lib/jsgrid/dist/jsgrid.css" />
         <link rel="stylesheet" href="~/lib/jsgrid/dist/jsgrid-theme.css" />
     </environment>
     <environment exclude="Development">
+        <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/base.css" />
+        <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/autocomplete.css" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/lib/jsgrid/dist/jsgrid.min.css" />
         <link rel="stylesheet" href="~/lib/jsgrid/dist/jsgrid-theme.min.css" />
@@ -23,7 +27,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">JS_Grid_Testing</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">JS_Testing</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -50,17 +54,19 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2019 - JS_Grid_Testing - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2019 - JS_Testing - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
         <script src="~/lib/jsgrid/dist/jsgrid.js"></script>
     </environment>
     <environment exclude="Development">
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="~/lib/jsgrid/dist/jsgrid.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     </environment>
