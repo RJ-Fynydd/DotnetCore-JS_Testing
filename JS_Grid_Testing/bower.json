@@ -1,20 +1,24 @@
 {
   "name": "JS_Grid_Testing",
+  "homepage": "https://github.com/RJ-Fynydd/DotnetCore-JS_Testing",
   "authors": [
     "Richard Nader Jr <richard.nader@fynydd.com>"
   ],
   "description": "",
   "main": "",
   "license": "MIT",
-  "homepage": "",
+  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
+    "wwwroot/lib",
     "test",
     "tests"
   ],
   "dependencies": {
-    "jsgrid": "js-grid#v1.5.3"
+    "bootstrap": "v4.2.1",
+    "jQuery": "3.3.1",
+    "jquery-ui": "jquery.ui#1.12.1"
   }
 }
