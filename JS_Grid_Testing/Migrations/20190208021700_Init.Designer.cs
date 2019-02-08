@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JS_Grid_Testing.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190206141915_Init")]
+    [Migration("20190208021700_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,20 @@ namespace JS_Grid_Testing.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("People");
+                });
+
+            modelBuilder.Entity("JS_Grid_Testing.Data.Entities.Property", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Key");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Properties");
                 });
 #pragma warning restore 612, 618
         }

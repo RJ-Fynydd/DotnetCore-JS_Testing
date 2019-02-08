@@ -31,6 +31,20 @@ namespace JS_Grid_Testing.Migrations
 
                     b.ToTable("People");
                 });
+
+            modelBuilder.Entity("JS_Grid_Testing.Data.Entities.Property", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Key");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Properties");
+                });
 #pragma warning restore 612, 618
         }
     }

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using JS_Grid_Testing.Data;
+﻿using JS_Grid_Testing.Data;
 using JS_Grid_Testing.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JS_Grid_Testing.Controllers
 {
@@ -33,18 +34,59 @@ namespace JS_Grid_Testing.Controllers
         {
             var people = _context.People.Where(p => p.Name.Contains(term) || p.Age.ToString().Contains(term)).ToList();
 
-            var results = new List<AutocompleteResult>();
+            var results = new List<AutoCompleteResult>();
 
-            foreach(var person in people)
+            foreach (var person in people)
             {
-                results.Add(new AutocompleteResult
+                results.Add(new AutoCompleteResult
                 {
-                    Id = person.Id,
-
+                    Label = person.Name,
+                    Value = person.Name
                 });
             }
 
-            return new JsonResult();
+            return new JsonResult(results);
+        }
+
+        [HttpGet("selected")]
+        public ActionResult SelectedPerson()
+        {
+            var person = _context.Properties.Where(p => p.Key.Equals("SelectedPerson")).First();
+
+            return new JsonResult(new AutoCompleteResult()
+            {
+                Value = person.Value,
+                Label = person.Value
+            });
+        }
+
+        [HttpPost("selected")]
+        public ActionResult SetSelectedPerson([FromBody] AutoCompleteResult autoCompleteResult)
+        {
+
+            if(_context.People.Where(p => p.Name.Equals(autoCompleteResult.Value)).Any())
+            {
+                try
+                {
+                    var selectedPerson = _context.Properties.Where(p => p.Key.Equals("SelectedPerson")).First();
+
+                    selectedPerson.Value = autoCompleteResult.Value;
+
+                    _context.Properties.Update(selectedPerson);
+
+                    _context.SaveChanges();
+
+                    return new JsonResult(autoCompleteResult);
+                }
+                catch (Exception e)
+                {
+                    return new BadRequestResult();
+                }
+            }
+            else
+            {
+                return new BadRequestResult();
+            }
         }
 
         [HttpGet("{id}")]
@@ -52,7 +94,7 @@ namespace JS_Grid_Testing.Controllers
         {
             var person = await _context.People.FindAsync(id);
 
-            if(person == null)
+            if (person == null)
             {
                 return NotFound();
             }
@@ -64,10 +106,9 @@ namespace JS_Grid_Testing.Controllers
 
     }
 
-    public class AutocompleteResult
+    public class AutoCompleteResult
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public string Label { get; set; }
         public string Value { get; set; }
     }
 }

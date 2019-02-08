@@ -1,10 +1,7 @@
 ﻿using JS_Grid_Testing.Data.Entities;
-using JS_Grid_Testing.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace JS_Grid_Testing.Data
 {
@@ -18,15 +15,10 @@ namespace JS_Grid_Testing.Data
             context.Database.EnsureCreated();
 
             // Look for any students.
-            if (context.People.AsNoTracking().Any())
+            if (!context.People.AsNoTracking().Any())
             {
-                return;   // DB has been seeded
-            }
-
-            
-
-            var people = new Person[]
-            {
+                var people = new Person[]
+                {
                 new Person{Name = "Carson", Age = GetNewAge(), Note = "Test"},
                 new Person{Name = "Dan", Age = GetNewAge(), Note = "Test"},
                 new Person{Name = "Jal", Age = GetNewAge(), Note = "Test"},
@@ -37,13 +29,27 @@ namespace JS_Grid_Testing.Data
                 new Person{Name = "Nick", Age = GetNewAge(), Note = "Test"},
                 new Person{Name = "Jalee", Age = GetNewAge(), Note = "Test"},
                 new Person{Name = "Collin", Age = GetNewAge(), Note = "Test"}
-            };
-            foreach (Person p in people)
-            {
-                context.People.Add(p);
+                };
+                foreach (Person p in people)
+                {
+                    context.People.Add(p);
+                }
+
+                context.SaveChanges();
+
             }
-            context.SaveChanges();
-            
+
+            if (!context.Properties.Where(p => p.Key.Equals("SelectedPerson")).Any())
+            {
+                context.Properties.Add(new Property()
+                {
+                    Key = "SelectedPerson",
+                    Value = context.People.First().Name
+                });
+
+
+                context.SaveChanges();
+            }
         }
 
         public static int GetNewAge()

@@ -15,6 +15,7 @@ namespace JS_Grid_Testing.Data
         }
 
         public DbSet<Person> People { get; set; }
+        public DbSet<Property> Properties { get; set; }
 
     }
 }

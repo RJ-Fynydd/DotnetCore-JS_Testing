@@ -2,55 +2,156 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div id="jsGrid"></div>
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div id="jsGrid"></div>
+        </div>
+    </div>
 
-<div class="ui-widget">
-    <label for="people">People: </label>
-    <input id="people">
+
+    <div class="row">
+        <div class="col-8 mx-auto">
+            <div class="ui-widget row">
+                <div class="col-6">
+                    <label for="people">Selected Person: </label>
+                </div>
+                <div class="col-6">
+                    <input id="people" />
+                </div>
+                
+            </div>
+            <div class="row">
+                <h4 id="peopleId"></h4>
+            </div>
+            <div class="row">
+                <button id="save" class="btn btn-outline-primary">Save Selected Person As Default</button>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 @section Scripts {
 
     <script type="text/javascript">
 
-        $("#jsGrid").jsGrid({
-            width: "100%",
-            height: 'auto',
-            pageLoading: false,
-            autoload: true,
-            sorting: true,
-            paging: true,
-            pageSize: 20,
-            pageButtonCount: 2,
-
-            fields: [
-                { name: "id", type: "text", width: 50, title: "ID" },
-                { name: "name", type: "text", width: 150, title: "NAME" },
-                { name: "age", type: "text", width: 50 },
-                { name: "note", type: "text", width: 300, title: "Notes" }
-            ],
-            controller: {
-                loadData: function (filter)
+        $(document).ready(function ()
+        {
+            $("#jsGrid").jsGrid({
+                width: "100%",
+                height: 'auto',
+                pageLoading: false,
+                autoload: true,
+                sorting: true,
+                paging: true,
+                pageSize: 20,
+                pageButtonCount: 2,
+                rowClick: function (args)
                 {
-                    return $.ajax({
-                        type: "GET",
-                        url: "/api/people",
-                        data: filter,
-                        dataType: "json"
-                    });
+                    setSelected(args.item.name);
+                },
+                fields: [
+                    { name: "id", type: "number", width: 50, title: "ID" },
+                    { name: "name", type: "text", width: 150, title: "NAME" },
+                    { name: "age", type: "text", width: 50 },
+                    { name: "note", type: "text", title: "Notes" }
+                ],
+                controller: {
+                    loadData: function (filter)
+                    {
+                        return $.ajax({
+                            type: "GET",
+                            url: "/api/people",
+                            data: filter,
+                            dataType: "json"
+                        });
+                    }
                 }
-            }
-        });
+            });
 
-        $("#people").autocomplete({
-            source: "/api/people/search",
-            minLength: 2,
-            select: function (event, ui)
+            $("#people").autocomplete({
+                source: function (request, response)
+                {
+                    $.ajax({
+                        type: "GET",
+                        url: "/api/people/search",
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function (data)
+                        {
+                            console.log("Search Data:", data);
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 1,
+                focus: function (event, ui)
+                {
+                    event.preventDefault();
+                    $(this).val(ui.item.label);
+                },
+                select: function (event, ui)
+                {
+                    event.preventDefault();
+                    setSelected(ui.item.label);
+                    
+                }
+            });
+
+            $.ajax({
+                url: "/api/people/selected",
+                type: "GET",
+                dataType: "json",
+                success: function (result)
+                {
+                    setSelected(result.value);
+                },
+                error: function (xhr)
+                {
+                    console.log("Error:", xhr);
+                }
+            });
+
+
+            $("#save").on("click", function ()
             {
-                console.log("Selected: ", ui.item);
-            }
+                saveSelected($("#people").val());
+            });
+
         });
 
+        function setSelected(value)
+        {
+            $("#people").val(value);
+            $("#peopleId").html(value);
+        }
+
+        function saveSelected(value)
+        {
+            $.ajax({
+                url: "/api/people/selected",
+                type: "POST",
+                contentType: 'application/json',
+                dataType: "json",
+                data: JSON.stringify({ label: value, value: value }),
+                success: function (result)
+                {
+                    setSelected(result.value);
+                    alert(value + " set as selected user!");
+                },
+                error: function (xhr)
+                {
+                    console.log("Error:", xhr);
+                    if (xhr.status == 400)
+                    {
+                        alert("Person with name \"" + value + "\" not valid!");
+                    }
+                }
+            });
+        }
 
     </script>
 
